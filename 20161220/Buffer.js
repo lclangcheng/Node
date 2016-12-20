@@ -51,3 +51,5 @@ console.log("buffer1 content: " + buffer1.toString("utf8", 0, 2));
 
 var buffer1 = new Buffer("www.lc.com");
 console.log("buffer length: " + buffer1.length);
+
+
