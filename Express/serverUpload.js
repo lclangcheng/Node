@@ -7,15 +7,16 @@ var multer = require('multer');
 
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({extended:false}));
-app.use(multer({dest:'/tmp/'}).array('iamge'));
+app.use(multer({dest:'/tmp2/'}).array('image'));
 
 app.get('/indexUpload.html', function(request, response) {
 	response.sendFile(__dirname + '/' + 'indexUpload.html');
 });
 
 app.post('/file_upload', function(request, response) {
-	console.log(request.files[0]);
+	console.log(request.files[0]); 
 	var des_file = __dirname + "/" + request.files[0].originalname;
+	console.log('path', request.files[0].path);
 	fs.readFile(request.files[0].path, function(err, data) {
 		fs.writeFile(des_file, data, function(err) {
 			if (err) {
@@ -23,10 +24,10 @@ app.post('/file_upload', function(request, response) {
 			} else {
 				responseJSON = {
 					message:'File uploaded successfully',
-					filename:request.file[0].originalname
+					filename:request.files[0].originalname
 				};
 			}
-			cosnole.log(responseJSON);
+			console.log(responseJSON);
 			response.end(JSON.stringify(responseJSON));
 		});
 	});
