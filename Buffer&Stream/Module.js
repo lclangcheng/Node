@@ -1,9 +1,9 @@
 
-var hello = require("./ModuleHello");
+var hello = require("./module_hello");
 hello.world();
 
 
-var Hello = require("./ModuleHello2");
+var Hello = require("./module_hello2");
 var hello = new Hello();
 hello.setName("llc");
 hello.sayHello();
