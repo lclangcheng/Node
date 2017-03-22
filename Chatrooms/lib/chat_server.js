@@ -4,6 +4,7 @@ var guestNumbser = 1;
 var nickNames = {};
 var namesUsed = [];
 var currentRoom = {};
+var _rooms = [];
 
 
 function assignGuestName(socket, guestNumbser, nickNames, namesUsed) {
@@ -19,15 +20,16 @@ function assignGuestName(socket, guestNumbser, nickNames, namesUsed) {
 }
 
 function joinRoom(socket, room) {
+	if (!~_rooms.indexOf(room)) _rooms.push(room);
 	socket.join(room);
 	currentRoom[socket.id] = room;
 	socket.emit('joinResult', {room: room});
-	socket.broadcast.to(room).emit('message', {
+	socket.to(room).emit('message', {
 		text: nickNames[socket.id] + 'has joined' + room + '.'
 	});
 
 	var usersInRoom = null;
-	io.sockets.clients(function(error, clients){
+	io.sockets.in(room).clients(function(error, clients){
  		if (error) throw error;
 
   		var usersInRoomSummary = "Users currently in " + room + ":";
@@ -105,7 +107,7 @@ exports.listen = function(server) {
 		handleRoomJoining(socket);
 
 		socket.on("rooms", function() {
-			socket.emit("rooms", io.sockets.manager.rooms);
+			socket.emit("rooms", _rooms);
 		});
 
 		handleClientDisconnection(socket, nickNames, namesUsed);

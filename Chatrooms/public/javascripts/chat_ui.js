@@ -48,29 +48,27 @@ $(document).ready(function() {
 	socket.on('rooms', function(rooms){
 		$('#room-list').empty();
 
-		for (var room in rooms) {
-			room = room.substring(1, room.length);
-			if (room != '') {
-				$('#room-list').append(divEscapedContentElement(room));
-			}
+		for (var index in rooms) {
+			$('#room-list').append(divEscapedContentElement(rooms[index]));
 		}
 
 		$('#room-list div').click(function() {
-			chatApp.processCommand('/join' + $this.text());
+			chatApp.processCommand('/join ' + $(this).text());
 			$('#send-message').focus();
 		})
-
-		setInterval(function() {
-			socket.emit('rooms');
-		}, 1000);
-
-		$('#send-message').focus();
-
-		$('#send-form').submit(function() {
-			processUserInput(chatApp, socket);
-			return false;
-		})
+		
 	});
+
+	setInterval(function() {
+		socket.emit('rooms');
+	}, 1000);
+
+	$('#send-message').focus();
+
+	$('#send-form').submit(function() {
+		processUserInput(chatApp, socket);
+		return false;
+	})
 
 
 })
